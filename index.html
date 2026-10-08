@@ -1,60 +1,155 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Studyhub</title>
-    <style>
-      body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
-      input, select { display: block; margin-bottom: 10px; padding: 8px; width: 100%; box-sizing: border-box; }
-      button { padding: 8px 16px; margin-right: 5px; cursor: pointer; }
-      .card { border: 1px solid #ccc; border-radius: 8px; padding: 12px; margin-top: 10px; background-color: #f9f9f9; }
-      .card-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
-      .btn-danger { background-color: #ff4d4d; color: white; border: none; border-radius: 4px; padding: 6px 12px; }
-      .btn-anexo { display: inline-block; margin-top: 8px; padding: 4px 8px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; font-size: 13px; }
-      .box-resumo { background-color: #eef6ff; border: 1px solid #b6d4fe; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
-      .oculto { display: none; }
-    </style>
+    <title>StudyHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <div id="toasts" class="toasts" aria-live="polite"></div>
 
-    <!-- ECRÃ DE AUTENTICAÇÃO -->
-    <div id="auth-container">
-      <h2>Entrar / Cadastrar</h2>
-      <input type="email" id="email" placeholder="Seu e-mail" />
-      <input type="password" id="password" placeholder="Sua senha" />
-      <button id="btn-entrar">ENTRAR</button>
-      <button id="btn-cadastrar">CADASTRAR</button>
+    <!-- ========== TELA DE ACESSO ========== -->
+    <main id="auth-container" class="auth">
+      <section class="auth-brand">
+        <div class="logo">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+          </span>
+          <span class="logo-text">StudyHub</span>
+        </div>
+
+        <div class="auth-copy">
+          <h1>Seus estudos, organizados em um só caderno.</h1>
+          <p>Cadastre cada matéria, acompanhe o que falta e guarde seus resumos e slides junto de cada uma.</p>
+        </div>
+
+        <ul class="auth-preview" aria-hidden="true">
+          <li><span>Java</span><em class="badge badge-em_andamento">Em andamento</em></li>
+          <li><span>Banco de Dados</span><em class="badge badge-concluido">Concluído</em></li>
+          <li><span>Redes de Computadores</span><em class="badge badge-a_fazer">A fazer</em></li>
+        </ul>
+      </section>
+
+      <section class="auth-panel">
+        <form id="form-auth" class="auth-form" novalidate>
+          <h2>Entre ou crie sua conta</h2>
+          <p class="muted">Use seu e-mail para acessar suas matérias.</p>
+
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" autocomplete="email" placeholder="voce@exemplo.com" required />
+          </div>
+
+          <div class="field">
+            <label for="password">Senha</label>
+            <input type="password" id="password" autocomplete="current-password" placeholder="Sua senha" required />
+          </div>
+
+          <p id="auth-msg" class="form-msg" role="alert"></p>
+
+          <div class="auth-actions">
+            <button type="submit" id="btn-entrar" class="btn btn-primary">Entrar</button>
+            <button type="button" id="btn-cadastrar" class="btn btn-outline">Criar conta</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <!-- ========== TELA DAS MATÉRIAS ========== -->
+    <div id="app-container" class="app oculto">
+      <header class="topbar">
+        <div class="logo">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+          </span>
+          <span class="logo-text">StudyHub</span>
+        </div>
+        <div class="topbar-user">
+          <span id="user-email" class="user-chip"></span>
+          <button id="btn-sair" class="btn btn-ghost" type="button">Sair</button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="side">
+          <section class="sheet" aria-labelledby="titulo-nova">
+            <h2 id="titulo-nova">Nova matéria</h2>
+
+            <div class="field">
+              <label for="titulo">Matéria</label>
+              <input type="text" id="titulo" placeholder="Ex.: Java" maxlength="80" />
+            </div>
+
+            <div class="field">
+              <label for="descricao">O que estudar</label>
+              <input type="text" id="descricao" placeholder="Ex.: Programação orientada a objetos" maxlength="160" />
+            </div>
+
+            <div class="field">
+              <span class="label">Anexo <span class="opt">(opcional)</span></span>
+              <label class="file-pick" for="arquivo">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                <span id="arquivo-nome">Escolher arquivo</span>
+                <input type="file" id="arquivo" />
+              </label>
+            </div>
+
+            <button id="btn-criar" class="btn btn-primary btn-block" type="button">Adicionar matéria</button>
+          </section>
+
+          <section class="resumo" aria-labelledby="titulo-resumo">
+            <h2 id="titulo-resumo">Resumo de estudos</h2>
+            <p class="muted small">Calculado por uma função serverless da Nhost.</p>
+            <button id="btn-resumo" class="btn btn-soft btn-block" type="button">Gerar resumo</button>
+            <div id="resultado-resumo" class="resumo-resultado"></div>
+          </section>
+        </aside>
+
+        <section class="main">
+          <div class="hello">
+            <h1 id="saudacao">Olá!</h1>
+            <p id="progresso-texto" class="muted"></p>
+            <div class="progress" role="progressbar" aria-label="Matérias concluídas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span id="progress-bar"></span>
+            </div>
+          </div>
+
+          <div class="filters" role="group" aria-label="Filtrar por status">
+            <button type="button" class="pill" data-filter="todas" aria-pressed="true">Todas <b data-count="todas">0</b></button>
+            <button type="button" class="pill" data-filter="a_fazer" aria-pressed="false">A fazer <b data-count="a_fazer">0</b></button>
+            <button type="button" class="pill" data-filter="em_andamento" aria-pressed="false">Em andamento <b data-count="em_andamento">0</b></button>
+            <button type="button" class="pill" data-filter="concluido" aria-pressed="false">Concluídas <b data-count="concluido">0</b></button>
+          </div>
+
+          <div id="lista-materias" class="lista"></div>
+        </section>
+      </div>
     </div>
 
-    <!-- ECRÃ DAS MATÉRIAS -->
-    <div id="app-container" class="oculto">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Minhas Matérias</h2>
-        <button id="btn-sair">Sair</button>
-      </div>
-
-      <!-- Resumo Serverless -->
-      <div class="box-resumo">
-        <button id="btn-resumo">Gerar Resumo de Estudos</button>
-        <div id="resultado-resumo" style="margin-top: 10px;"></div>
-      </div>
-
-      <!-- Criar Matéria -->
-      <h3>Nova Matéria</h3>
-      <input type="text" id="titulo" placeholder="Título (ex: Java)" />
-      <input type="text" id="descricao" placeholder="Descrição (ex: Estudar POO)" />
-      
-      <label style="font-size: 14px; font-weight: bold;">Anexo (Opcional):</label>
-      <input type="file" id="arquivo" />
-
-      <button id="btn-criar">Adicionar Matéria</button>
-
-      <hr style="margin-top: 20px;" />
-
-      <!-- Lista de Matérias -->
-      <div id="lista-materias"></div>
-    </div>
+    <!-- ========== EDITAR MATÉRIA ========== -->
+    <dialog id="dialog-editar" class="dialog">
+      <form id="form-editar">
+        <h2>Editar matéria</h2>
+        <div class="field">
+          <label for="edit-titulo">Matéria</label>
+          <input type="text" id="edit-titulo" maxlength="80" required />
+        </div>
+        <div class="field">
+          <label for="edit-descricao">O que estudar</label>
+          <input type="text" id="edit-descricao" maxlength="160" />
+        </div>
+        <div class="dialog-actions">
+          <button type="button" id="btn-cancelar-edicao" class="btn btn-ghost">Cancelar</button>
+          <button type="submit" id="btn-salvar-edicao" class="btn btn-primary">Salvar alterações</button>
+        </div>
+      </form>
+    </dialog>
 
     <script type="module" src="/src/main.js"></script>
   </body>
