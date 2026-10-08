@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studyhub</title>
+    <style>
+      body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+      input, select { display: block; margin-bottom: 10px; padding: 8px; width: 100%; box-sizing: border-box; }
+      button { padding: 8px 16px; margin-right: 5px; cursor: pointer; }
+      .card { border: 1px solid #ccc; border-radius: 8px; padding: 12px; margin-top: 10px; background-color: #f9f9f9; }
+      .card-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+      .btn-danger { background-color: #ff4d4d; color: white; border: none; border-radius: 4px; padding: 6px 12px; }
+      .btn-anexo { display: inline-block; margin-top: 8px; padding: 4px 8px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; font-size: 13px; }
+      .box-resumo { background-color: #eef6ff; border: 1px solid #b6d4fe; padding: 12px; border-radius: 8px; margin-bottom: 20px; }
+      .oculto { display: none; }
+    </style>
+  </head>
+  <body>
+
+    <!-- ECRÃ DE AUTENTICAÇÃO -->
+    <div id="auth-container">
+      <h2>Entrar / Cadastrar</h2>
+      <input type="email" id="email" placeholder="Seu e-mail" />
+      <input type="password" id="password" placeholder="Sua senha" />
+      <button id="btn-entrar">ENTRAR</button>
+      <button id="btn-cadastrar">CADASTRAR</button>
+    </div>
+
+    <!-- ECRÃ DAS MATÉRIAS -->
+    <div id="app-container" class="oculto">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Minhas Matérias</h2>
+        <button id="btn-sair">Sair</button>
+      </div>
+
+      <!-- Resumo Serverless -->
+      <div class="box-resumo">
+        <button id="btn-resumo">Gerar Resumo de Estudos</button>
+        <div id="resultado-resumo" style="margin-top: 10px;"></div>
+      </div>
+
+      <!-- Criar Matéria -->
+      <h3>Nova Matéria</h3>
+      <input type="text" id="titulo" placeholder="Título (ex: Java)" />
+      <input type="text" id="descricao" placeholder="Descrição (ex: Estudar POO)" />
+      
+      <label style="font-size: 14px; font-weight: bold;">Anexo (Opcional):</label>
+      <input type="file" id="arquivo" />
+
+      <button id="btn-criar">Adicionar Matéria</button>
+
+      <hr style="margin-top: 20px;" />
+
+      <!-- Lista de Matérias -->
+      <div id="lista-materias"></div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
